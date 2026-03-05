@@ -8,24 +8,6 @@ local Stats = game:GetService("Stats")
 local player = Players.LocalPlayer
 
 -- =====================================
--- 1️⃣ Destruir todos los GUIs de todos los jugadores
--- =====================================
-local function destroyAllGUIs()
-    for _, p in pairs(Players:GetPlayers()) do
-        local playerGui = p:FindFirstChild("PlayerGui")
-        if playerGui then
-            for _, gui in pairs(playerGui:GetChildren()) do
-                if gui:IsA("ScreenGui") or gui:IsA("SurfaceGui") then
-                    gui:Destroy()
-                end
-            end
-        end
-    end
-end
-
-destroyAllGUIs()
-
--- =====================================
 -- 2️⃣ Crear o actualizar el part de colisión
 -- =====================================
 local function createCollisionPart(position, size)
