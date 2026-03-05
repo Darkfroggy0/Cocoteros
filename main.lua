@@ -3,7 +3,6 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-local Stats = game:GetService("Stats")
 
 local player = Players.LocalPlayer
 
@@ -122,7 +121,7 @@ end
 RunService:SetRobloxFPSCap(30)
 
 -- =====================================
--- 🔟 UI persistente de tiempo activo
+-- 🔟 UI persistente de tiempo activo con RGB
 -- =====================================
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -132,9 +131,9 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 50)
+frame.Size = UDim2.new(0, 220, 0, 60)
 frame.Position = UDim2.new(0, 20, 0, 20)
-frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 frame.Active = true
@@ -144,20 +143,20 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 20)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "Farm Stats"
+title.Text = "⏱ Farm Activa"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.SourceSansBold
+title.Font = Enum.Font.Bodoni
 title.TextSize = 18
 title.Parent = frame
 
 local timeLabel = Instance.new("TextLabel")
-timeLabel.Size = UDim2.new(1, -10, 0, 20)
+timeLabel.Size = UDim2.new(1, -10, 0, 30)
 timeLabel.Position = UDim2.new(0, 5, 0, 25)
 timeLabel.BackgroundTransparency = 1
-timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-timeLabel.Font = Enum.Font.SourceSans
-timeLabel.TextSize = 16
-timeLabel.TextXAlignment = Enum.TextXAlignment.Left
+timeLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+timeLabel.Font = Enum.Font.Bodoni
+timeLabel.TextSize = 18
+timeLabel.TextXAlignment = Enum.TextXAlignment.Center
 timeLabel.Parent = frame
 
 -- =====================================
@@ -173,8 +172,20 @@ local function getTimeElapsed()
 end
 
 -- =====================================
+-- Función RGB para el texto
+-- =====================================
+local function getRGBColor()
+    local t = tick() * 2
+    local r = (math.sin(t) * 127 + 128)/255
+    local g = (math.sin(t + 2) * 127 + 128)/255
+    local b = (math.sin(t + 4) * 127 + 128)/255
+    return Color3.new(r, g, b)
+end
+
+-- =====================================
 -- Actualizar UI cada frame
 -- =====================================
 RunService.RenderStepped:Connect(function()
-    timeLabel.Text = "Tiempo activo: " .. getTimeElapsed()
+    timeLabel.Text = getTimeElapsed()
+    timeLabel.TextColor3 = getRGBColor()
 end)
