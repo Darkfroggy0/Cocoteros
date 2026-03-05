@@ -1,6 +1,8 @@
 -- LocalScript dentro de StarterPlayerScripts
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 
@@ -130,3 +132,73 @@ for _, obj in pairs(Workspace:GetDescendants()) do
         obj.WaterReflectance = 1
     end
 end
+
+-- =====================================
+-- 9️⃣ UI persistente de Tiempo activo y FPS
+-- =====================================
+local playerGui = player:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "FarmStatsUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 70)
+frame.Position = UDim2.new(0, 20, 0, 20)
+frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+frame.Active = true
+frame.Draggable = true
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 20)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Farm Stats"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 18
+title.Parent = frame
+
+local timeLabel = Instance.new("TextLabel")
+timeLabel.Size = UDim2.new(1, -10, 0, 20)
+timeLabel.Position = UDim2.new(0, 5, 0, 25)
+timeLabel.BackgroundTransparency = 1
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeLabel.Font = Enum.Font.SourceSans
+timeLabel.TextSize = 16
+timeLabel.TextXAlignment = Enum.TextXAlignment.Left
+timeLabel.Parent = frame
+
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(1, -10, 0, 20)
+fpsLabel.Position = UDim2.new(0, 5, 0, 45)
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.Font = Enum.Font.SourceSans
+fpsLabel.TextSize = 16
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
+fpsLabel.Parent = frame
+
+-- =====================================
+-- Temporizador
+-- =====================================
+local startTime = tick()
+local function getTimeElapsed()
+    local elapsed = tick() - startTime
+    local hours = math.floor(elapsed / 3600)
+    local minutes = math.floor((elapsed % 3600) / 60)
+    local seconds = math.floor(elapsed % 60)
+    return string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+-- =====================================
+-- Actualizar UI cada frame
+-- =====================================
+RunService.RenderStepped:Connect(function(deltaTime)
+    timeLabel.Text = "Tiempo activo: " .. getTimeElapsed()
+    local fps = math.floor(1 / deltaTime)
+    fpsLabel.Text = "FPS: " .. fps
+end)
