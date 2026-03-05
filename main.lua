@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local Stats = game:GetService("Stats")
 
 local player = Players.LocalPlayer
 
@@ -134,7 +135,12 @@ for _, obj in pairs(Workspace:GetDescendants()) do
 end
 
 -- =====================================
--- 9️⃣ UI persistente de Tiempo activo y FPS
+-- 9️⃣ Limitar FPS a 30
+-- =====================================
+RunService:SetRobloxFPSCap(30)
+
+-- =====================================
+-- 🔟 UI persistente de tiempo activo
 -- =====================================
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -144,7 +150,7 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 70)
+frame.Size = UDim2.new(0, 200, 0, 50)
 frame.Position = UDim2.new(0, 20, 0, 20)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 frame.BorderSizePixel = 0
@@ -172,16 +178,6 @@ timeLabel.TextSize = 16
 timeLabel.TextXAlignment = Enum.TextXAlignment.Left
 timeLabel.Parent = frame
 
-local fpsLabel = Instance.new("TextLabel")
-fpsLabel.Size = UDim2.new(1, -10, 0, 20)
-fpsLabel.Position = UDim2.new(0, 5, 0, 45)
-fpsLabel.BackgroundTransparency = 1
-fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-fpsLabel.Font = Enum.Font.SourceSans
-fpsLabel.TextSize = 16
-fpsLabel.TextXAlignment = Enum.TextXAlignment.Left
-fpsLabel.Parent = frame
-
 -- =====================================
 -- Temporizador
 -- =====================================
@@ -197,8 +193,6 @@ end
 -- =====================================
 -- Actualizar UI cada frame
 -- =====================================
-RunService.RenderStepped:Connect(function(deltaTime)
+RunService.RenderStepped:Connect(function()
     timeLabel.Text = "Tiempo activo: " .. getTimeElapsed()
-    local fps = math.floor(1 / deltaTime)
-    fpsLabel.Text = "FPS: " .. fps
 end)
