@@ -6,9 +6,7 @@ local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 
--- =====================================
--- 2️⃣ Crear o actualizar el part de colisión
--- =====================================
+
 local function createCollisionPart(position, size)
     local collisionPart = Workspace:FindFirstChild("CollisionPart")
     if not collisionPart then
@@ -26,18 +24,14 @@ local function createCollisionPart(position, size)
     return collisionPart
 end
 
--- =====================================
--- 3️⃣ Teleportar el personaje sobre el part de colisión
--- =====================================
+
 local function teleportCharacterAbovePart(character, part)
     local hrp = character:WaitForChild("HumanoidRootPart")
     local yOffset = part.Size.Y / 2 + hrp.Size.Y / 2
     hrp.CFrame = CFrame.new(part.Position.X, part.Position.Y + yOffset, part.Position.Z)
 end
 
--- =====================================
--- 4️⃣ Limpiar Workspace dejando solo el bloque de colisión
--- =====================================
+
 local function cleanWorkspace(exceptPart)
     for _, obj in pairs(Workspace:GetDescendants()) do
         if obj:IsA("Sound") then
@@ -55,17 +49,15 @@ local function cleanWorkspace(exceptPart)
     end
 end
 
--- =====================================
--- 5️⃣ Configurar bloque de colisión
--- =====================================
+
 local collisionPosition = Vector3.new(2520, -1100.6, 850)
 local collisionSize = Vector3.new(10, 1, 10)
 local collisionPart = createCollisionPart(collisionPosition, collisionSize)
 
--- Limpiar al inicio
+
 cleanWorkspace(collisionPart)
 
--- Teleport inicial y al reaparecer
+
 if player.Character then
     teleportCharacterAbovePart(player.Character, collisionPart)
 end
@@ -74,9 +66,7 @@ player.CharacterAdded:Connect(function(character)
     teleportCharacterAbovePart(character, collisionPart)
 end)
 
--- =====================================
--- 6️⃣ Mantener limpieza para objetos nuevos
--- =====================================
+
 Workspace.DescendantAdded:Connect(function(desc)
     if desc:IsA("Sound") then
         desc:Stop()
@@ -92,9 +82,7 @@ Workspace.DescendantAdded:Connect(function(desc)
     end
 end)
 
--- =====================================
--- 7️⃣ Mantener limpieza de GUIs nuevas
--- =====================================
+
 Players.PlayerAdded:Connect(function(p)
     local playerGui = p:WaitForChild("PlayerGui")
     playerGui.DescendantAdded:Connect(function(desc)
@@ -104,9 +92,7 @@ Players.PlayerAdded:Connect(function(p)
     end)
 end)
 
--- =====================================
--- 8️⃣ Quitar agua si existe
--- =====================================
+
 for _, obj in pairs(Workspace:GetDescendants()) do
     if obj:IsA("Terrain") then
         obj.WaterTransparency = 1
@@ -115,14 +101,10 @@ for _, obj in pairs(Workspace:GetDescendants()) do
     end
 end
 
--- =====================================
--- 9️⃣ Limitar FPS a 30
--- =====================================
+
 RunService:SetRobloxFPSCap(30)
 
--- =====================================
--- 🔟 UI persistente de tiempo activo con RGB
--- =====================================
+
 local playerGui = player:WaitForChild("PlayerGui")
 
 local screenGui = Instance.new("ScreenGui")
@@ -159,9 +141,7 @@ timeLabel.TextSize = 18
 timeLabel.TextXAlignment = Enum.TextXAlignment.Center
 timeLabel.Parent = frame
 
--- =====================================
--- Temporizador
--- =====================================
+
 local startTime = tick()
 local function getTimeElapsed()
     local elapsed = tick() - startTime
@@ -171,9 +151,7 @@ local function getTimeElapsed()
     return string.format("%02d:%02d:%02d", hours, minutes, seconds)
 end
 
--- =====================================
--- Función RGB para el texto
--- =====================================
+
 local function getRGBColor()
     local t = tick() * 2
     local r = (math.sin(t) * 127 + 128)/255
@@ -182,9 +160,7 @@ local function getRGBColor()
     return Color3.new(r, g, b)
 end
 
--- =====================================
--- Actualizar UI cada frame
--- =====================================
+
 RunService.RenderStepped:Connect(function()
     timeLabel.Text = getTimeElapsed()
     timeLabel.TextColor3 = getRGBColor()
