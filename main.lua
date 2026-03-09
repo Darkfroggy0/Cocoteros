@@ -13,7 +13,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 --------------------------------------------------
 
 local CFG = {
-    COLLISION_POS  = Vector3.new(2520, -1100.6, 850),
+    COLLISION_POS  = Vector3.new(-2669.1, -318.3, -2447.3),
     COLLISION_SIZE = Vector3.new(10, 1, 10),
 }
 
@@ -42,21 +42,38 @@ collisionPart.Parent     = Workspace
 local function teleport(char)
     task.spawn(function()
         pcall(function()
+
             local hrp = char:WaitForChild("HumanoidRootPart", 10)
-            if not hrp then return end
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+
+            if not hrp or not humanoid then return end
+
+            -- asegurar posición correcta del part
+            collisionPart.Position = CFG.COLLISION_POS
+
             hrp.Anchored = true
-            local offset = CFG.COLLISION_SIZE.Y / 2 + hrp.Size.Y / 2 + 0.1
+
+            local partHeight = collisionPart.Size.Y / 2
+            local rootHeight = hrp.Size.Y / 2
+            local hipHeight = humanoid.HipHeight
+
+            local finalY = CFG.COLLISION_POS.Y + partHeight + rootHeight + hipHeight
+
             hrp.CFrame = CFrame.new(
                 CFG.COLLISION_POS.X,
-                CFG.COLLISION_POS.Y + offset,
+                finalY,
                 CFG.COLLISION_POS.Z
             )
-            for _ = 1, 5 do RunService.Heartbeat:Wait() end
+
+            for _ = 1,5 do
+                RunService.Heartbeat:Wait()
+            end
+
             hrp.Anchored = false
+
         end)
     end)
 end
-
 --------------------------------------------------
 -- PROMPT SKIP (siempre activo)
 --------------------------------------------------
