@@ -13,7 +13,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 --------------------------------------------------
 
 local CFG = {
-    COLLISION_POS  = Vector3.new(-2669.1, -318.3, -2447.3),
+    COLLISION_POS  = Vector3.new(-2634.2, -32011, -2447.7),
     COLLISION_SIZE = Vector3.new(10, 1, 10),
 }
 
